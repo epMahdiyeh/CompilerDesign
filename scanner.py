@@ -1,9 +1,9 @@
 import re
-import os
+#import os
 #def getNextToken():
 
 def cur_state(state:int,char:str):
-    symbol = [";", ":", ",", "[", "]", "(", ")", "{", "}", "+", "-" , "<"]
+    symbol = [";", ":", ",", "[", "]", "(", ")", "{", "}", "+", "-", "<"]
     whitespace = [" ", "\n", "\t", "\r", "\f", "\v"]
     keywords = ["if", "else", "void", "int", "repeat", "break", "until", "return"]
     out =  ["next_state or error type"]
@@ -16,10 +16,10 @@ def cur_state(state:int,char:str):
         #num
         elif(re.match(char,'[0-9]')):
             out = 3
-        elif(char=='*')   :
+        elif(char=='*'):
             out=2
         #=
-        elif(re.match(char=="=")):
+        elif(char=='='):
             out = 4
         #symbol exept for =
         elif(char in symbol):
@@ -43,7 +43,12 @@ def cur_state(state:int,char:str):
         else:
             error=True
             out="invalid input"
-
+    elif(state==2):
+        if(char=='/'):
+            error=True
+            out="unmatched comment"
+        else:
+            out=7
 
 #num
     elif(state==3):
