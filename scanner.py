@@ -16,6 +16,8 @@ def cur_state(state:int,char:str):
         #num
         elif(re.match(char,'[0-9]')):
             out = 3
+        elif(char=='*')   :
+            out=2
         #=
         elif(re.match(char=="=")):
             out = 4
@@ -31,6 +33,7 @@ def cur_state(state:int,char:str):
         else:
          error=True
          out="Invalid input"
+#id
     elif(state==1):
         if(re.match(char,'[a-zA-Z0-9]')):
             out = 1
@@ -40,9 +43,9 @@ def cur_state(state:int,char:str):
         else:
             error=True
             out="invalid input"
-    elif(state==2):
-        if(char=='/'):
-            out="unmatched comment"
+
+
+#num
     elif(state==3):
         if(re.match(char,'[0-9]')):
             out=3
@@ -52,6 +55,7 @@ def cur_state(state:int,char:str):
         else:
             out="invalid number"
             error=True
+# =
     elif(state==4):
         if(char=='='):
             out=5
@@ -61,38 +65,65 @@ def cur_state(state:int,char:str):
         else:
             error = True
             out = "invalid input"
+#==
     elif(state==5):
         if(char in whitespace+symbol+["=", "*", "/"] or re.match(char,'[a-zA-Z0-9]')):
             out=17
         else:
             error=True
             out="invalid input"
+#symbol
     elif(state==7):
         if(char in whitespace+["=", "*", "/"] or re.match(char,'[a-zA-Z0-9]') ):
             out=18
         else:
             error=True
             out="invalid input"
+#
     elif(state==8):
         if( char=='*'):
             out=9
         elif(char=='/'):
             out=12
+        else:
+            out="invalid input"
+            error=True
     elif(state==9) :
         if( not char=='*'):
             out=9
         elif(char=='*'):
             out=10
+        else:
+            out = "unclosed comment"
+            error = True
+    elif(state==10):
+        if(char=='/'):
+            out=11
+        else:
+            out = "invalid input"
+            error = True
 
-    #elif(state==10):
-        #if()
+    elif(state==11):
+        if(char in whitespace+symbol+["=", "*", "/"] or re.match(char,'[a-zA-Z0-9]')):
+            out=21
+        else:
+            out = "invalid input"
+            error = True
+    elif(state==12) :
+        if(not char=="\n"):
+            out=12
+        else:
+            out=13
+    elif(state==13):
+        if(char in whitespace+symbol+["=", "*", "/"] or re.match(char,'[a-zA-Z0-9]')):
+            out=20
+        else:
+            out = "invalid input"
+            error = True
 
-    #elif(state==11):
-    #elif(state==12) :
-    #elif(state==13):
 
 
-   # elif(state==14):
+
 
 
 
