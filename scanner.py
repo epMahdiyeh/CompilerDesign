@@ -1,6 +1,6 @@
 import re
-#import os
-#def getNextToken():
+import os
+def getNextToken():
 
 def cur_state(state:int,char:str):
     symbol = [";", ":", ",", "[", "]", "(", ")", "{", "}", "+", "-", "<"]
@@ -125,11 +125,6 @@ def cur_state(state:int,char:str):
         else:
             out = "invalid input"
             error = True
-
-
-
-
-
 
 
 
