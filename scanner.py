@@ -9,6 +9,12 @@ def cur_state(state:int,char:str):
     out =  ["next_state or error type"]
     error=False
     end=False
+
+    INPUT = open(os.path.realpath("./ResultFiles/input.txt"), "rb")
+    errors = open(os.path.realpath("./ResultFiles/lexical_errors.txt"), "w")
+    symbols = open(os.path.realpath("./ResultFiles/symbol_table.txt"), "w")
+    tokens = open(os.path.realpath("./ResultFiles/tokens.txt"), "w")
+
     if (state == 0):
         # keyword an id
         if(re.match(char,'[a-zA-Z]')):
