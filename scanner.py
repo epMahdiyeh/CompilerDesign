@@ -19,7 +19,7 @@ def lookahead_state(state:int,char:str):
     symbols = open(os.path.realpath("./ResultFiles/symbol_table.txt"), "w")
     tokens = open(os.path.realpath("./ResultFiles/tokens.txt"), "w")
 
-    add_symbols(symbols, KEYWORDS, 1)
+    # add_symbols(symbols, KEYWORDS, 1)
 
     line = 1
     exist_error = False
