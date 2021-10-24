@@ -178,18 +178,6 @@ def get_next_token (INPUT, KEYWORDS):
     else:
         resultForToken=["","",-1,False]
         return resultForToken
-
-
-
-
-
-
-
-
-
-
-
-
 def write_in_symbol_file(symbols, array, start_line: int):
     return True
 def format_unclosed_comment(lexeme: str):
