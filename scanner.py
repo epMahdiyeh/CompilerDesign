@@ -14,7 +14,7 @@ def lookahead_state(state:int,char:str):
     error=False
     end=False
 
-    INPUT = open(os.path.realpath("./ResultFiles/input.txt"), "rb")
+    INPUT = open(os.path.realpath("./input/input.txt"), "rb")
     errors = open(os.path.realpath("./ResultFiles/lexical_errors.txt"), "w")
     symbols = open(os.path.realpath("./ResultFiles/symbol_table.txt"), "w")
     tokens = open(os.path.realpath("./ResultFiles/tokens.txt"), "w")
