@@ -1,11 +1,13 @@
 import re
 import os
 #def getNextToken():
+
 def is_keyword (KEYWORDS, ID : str):
     if (ID in KEYWORDS):
         return True
     else:
         return False
+
 def lookahead_state(state:int,char:str):
     symbol = [";", ":", ",", "[", "]", "(", ")", "{", "}", "+", "-", "<"]
     whitespace = [" ", "\n", "\t", "\r", "\f", "\v"]
@@ -19,10 +21,55 @@ def lookahead_state(state:int,char:str):
     symbols = open(os.path.realpath("./ResultFiles/symbol_table.txt"), "w")
     tokens = open(os.path.realpath("./ResultFiles/tokens.txt"), "w")
 
+    add_symbols(symbols, KEYWORDS, 1)
+
+    line = 1
+    exist_error = False
+    change_line = False
+    first_line = True
+
+    while (True):
+        token = get_next_token(INPUT, KEYWORDS)
+
+        if (token[3] and token[2] == -1):
+            break
+
+        if (not (token[0] == "Invalid input" or token[0] == "Unclosed comment" or token[0] == "Invalid number" or token[0] == "Unmatched comment" or token[0] == "COMMENT" or token[0] == "WHITESPACE")):
+            if (first_line or change_line):
+                if (not line == 1 and not first_line):
+                    tokens.write("\n")
+                tokens.write(str(line) + ".\t")
+                change_line = False
+                first_line = False
+            tokens.write("(" + token[0] + ", " + token[1] + ")" + " ")
+        elif (not (token[0] == "COMMENT" or token[0] == "WHITESPACE")):
+            exist_error = True
+            #-----------------------------------------------------------------------------------------unclosed comment-----------------------------------------------------------------
+        # if (token[0] == "Unclosed comment"):
+        # token[1] = format_unclosed_comment(token[1])
+        # errors.write(str(line) + ".\t" + "(" + token[1] + ", " + token[0] + ")\n")
+
+        if (token[0] == "ID" and token[1] not in ID):
+            ID.append(token[1])
+
+        if (token[2] > 0):
+            line += token[2]
+            change_line = True
+
+    if (not exist_error):
+        errors.write("There is no lexical error.")
+
+    add_symbols(symbols, ID, 11)
+
+    INPUT.close()
+    tokens.close()
+    errors.close()
+    symbols.close()
+
     if (state == 0):
         # keyword an id
         if(re.match(char,'[a-zA-Z]')):
-            out  1
+            out = 1
         #num
         elif(re.match(char,'[0-9]')):
             out = 3
@@ -95,7 +142,7 @@ def lookahead_state(state:int,char:str):
             out="invalid input"
 #
     elif(state==8):
-        if( char=='*'):
+        if(char=='*'):
             out=9
         elif(char=='/'):
             out=12
@@ -139,9 +186,10 @@ def lookahead_state(state:int,char:str):
         out = state
 
     return out
+
 def get_next_token (INPUT, KEYWORDS):
 
-    STATE_SITUATION = ["", "", "ID", "", "NUM", "SYMBOL", "", "SYMBOL", "", "SYMBOL", "", "", "COMMENT", "", "", "WHITESPACE"]
+    status = ["", "", "ID", "", "NUM", "SYMBOL", "", "SYMBOL", "", "SYMBOL", "", "", "COMMENT", "", "", "WHITESPACE"]
     STATE = 0
     change_line = 0
     lexeme = ""
@@ -153,16 +201,15 @@ def get_next_token (INPUT, KEYWORDS):
 
         next_state = lookahead_state(STATE, character)
         STATE = next_state[1]
-
     return True
 
 
 def get_next_token (INPUT, KEYWORDS):
 
     STATE_SITUATION = ["", "","","","","symbol" "ID", "", "NUM", "SYMBOL", "", "SYMBOL", "", "SYMBOL", "", "", "COMMENT", "", "", "WHITESPACE"]
-    STATE = 0
-    change_line = 0
+    next_line = 0
     lexeme = ""
+    STATE = 0
     return True
 
 
