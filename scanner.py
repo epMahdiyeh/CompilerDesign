@@ -191,6 +191,12 @@ def get_next_token(INPUT, KEYWORDS):
 
 
 
+def add_symbols(symbols, array, start_line: int):
+
+    for i in range(len(array)):
+        symbols.write(str(start_line) + ".\t" + array[i] + "\n")
+        start_line += 1
+
 KEYWORDS = ["if", "else", "void", "int", "while", "break", "switch", "default", "case", "return"]
 ID = []
 
@@ -199,7 +205,7 @@ errors = open(os.path.realpath("./ResultFiles/lexical_errors.txt"), "w")
 symbols = open(os.path.realpath("./ResultFiles/symbol_table.txt"), "w")
 tokens = open(os.path.realpath("./ResultFiles/tokens.txt"), "w")
 
-# add_symbols(symbols, KEYWORDS, 1)
+add_symbols(symbols, KEYWORDS, 1)
 
 line = 1
 exist_error = False
