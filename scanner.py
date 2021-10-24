@@ -1,6 +1,6 @@
 import re
-#import os
-#def getNextToken():
+import os
+
 def is_keyword (KEYWORDS, ID : str):
     if (ID in KEYWORDS):
         return True
@@ -10,155 +10,184 @@ def lookahead_state(state:int,char:str):
     symbol = [";", ":", ",", "[", "]", "(", ")", "{", "}", "+", "-", "<"]
     whitespace = [" ", "\n", "\t", "\r", "\f", "\v"]
     keywords = ["if", "else", "void", "int", "repeat", "break", "until", "return"]
-    out =  ["next_state or error type"]
+    position =  "next_state or error type"
     error=False
     end=False
     if (state == 0):
         # keyword an id
         if(re.match(char,'[a-zA-Z]')):
-            out = 1
+            position = 1
         #num
         elif(re.match(char,'[0-9]')):
-            out = 3
+            position = 3
         elif(char=='*'):
-            out=2
+            position=2
         #=
         elif(char=='='):
-            out = 4
+            position = 4
         #symbol exept for =
         elif(char in symbol):
-            out = 7
+            position = 7
         #comment
         elif(char=='/'):
-            out=8
+            position=8
         #whitespace
         elif ( char in whitespace ) :
-            out = 14
+            position = 14
         else:
          error=True
-         out="Invalid input"
+         position="Invalid input"
 #id
     elif(state==1):
         if(re.match(char,'[a-zA-Z0-9]')):
-            out = 1
+            position = 1
         elif(char in whitespace+symbol + ["=", "*", "/"]):
-            out =15
+            position =15
             end = True
         else:
             error=True
-            out="invalid input"
+            position="invalid input"
     elif(state==2):
         if(char=='/'):
             error=True
-            out="unmatched comment"
+            position="unmatched comment"
         else:
-            out=7
+            position=7
 
 #num
     elif(state==3):
         if(re.match(char,'[0-9]')):
-            out=3
+            position=3
         elif((char in whitespace+symbol+["=", "*", "/"]) or (re.match(char,'[a-zA-z]'))):
-            out=16
+            position=16
             end=True
         else:
-            out="invalid number"
+            position="invalid number"
             error=True
 # =
     elif(state==4):
         if(char=='='):
-            out=5
+            position=5
         elif(char in whitespace+symbol+[ "*", "/"] or re.match(char,'[a-zA-Z0-9]')):
-            out=6
+            position=6
             end=True
         else:
             error = True
-            out = "invalid input"
+            position = "invalid input"
 #==
     elif(state==5):
         if(char in whitespace+symbol+["=", "*", "/"] or re.match(char,'[a-zA-Z0-9]')):
-            out=17
+            position=17
         else:
             error=True
-            out="invalid input"
+            position="invalid input"
 #symbol
     elif(state==7):
         if(char in whitespace+["=", "*", "/"] or re.match(char,'[a-zA-Z0-9]') ):
-            out=18
+            position=18
         else:
             error=True
-            out="invalid input"
+            position="invalid input"
 #
     elif(state==8):
         if( char=='*'):
-            out=9
+            position=9
         elif(char=='/'):
-            out=12
+            position=12
         else:
-            out="invalid input"
+            position="invalid input"
             error=True
     elif(state==9) :
         if( not char=='*'):
-            out=9
+            position=9
         elif(char=='*'):
-            out=10
+            position=10
         else:
-            out = "unclosed comment"
+            position = "unclosed comment"
             error = True
     elif(state==10):
         if(char=='/'):
-            out=11
+            position=11
         else:
-            out = "invalid input"
+            position = "invalid input"
             error = True
 
     elif(state==11):
         if(char in whitespace+symbol+["=", "*", "/"] or re.match(char,'[a-zA-Z0-9]')):
-            out=21
+            position=21
         else:
-            out = "invalid input"
+            position = "invalid input"
             error = True
     elif(state==12) :
         if(not char=="\n"):
-            out=12
+            position=12
         else:
-            out=13
+            position=13
     elif(state==13):
         if(char in whitespace+symbol+["=", "*", "/"] or re.match(char,'[a-zA-Z0-9]')):
-            out=20
+            position=20
         else:
-            out = "invalid input"
+            position = "invalid input"
             error = True
 
-    if (out == "next_state or error type"):
-        out = state
-
+    if (position == "next_state or error type"):
+        position = state
+    out=[error,position,end]
     return out
 def get_next_token (INPUT, KEYWORDS):
 
-    STATE_SITUATION = ["", "", "ID", "", "NUM", "SYMBOL", "", "SYMBOL", "", "SYMBOL", "", "", "COMMENT", "", "", "WHITESPACE"]
-    STATE = 0
+    states = ["","", "", "", "", "", "symbol", "", "", "", "", "", "", "whitespace", "ID", "Num", "symbol", "symbol", "", "comment", "comment", "", "", "symbol" "ID", "", "NUM", "SYMBOL", "", "SYMBOL", "", "SYMBOL", "", "", "COMMENT", "", "", "WHITESPACE"]
     change_line = 0
-    lexeme = ""
+    string = ""
+
+    resultForToken=[]
 
     while (True):
-        character = INPUT.read(1).decode()
+        i = 1
+        character = INPUT.read(i).decode()
         if (character == ""):
             break
 
-        next_state = cur_state(STATE, character)
-        STATE = next_state[1]
+        next_state = lookahead_state(0, character)
+        if (character == "\n" and  next_state[2]==False):
+            change_line += 1
 
-    return True
+        if(next_state[0]==True):
+            resultForToken=[next_state[1],string+character,change_line,False]
+            return resultForToken
+        elif(states[next_state[1]]!=""):
+            INPUT.seek(-1 * i, os.SEEK_CUR)
+            if(next_state[1]==15):
+                if (is_keyword(KEYWORDS, string)):
+                    resultForToken=["KEYWORD", string, change_line, False]
+                    return resultForToken
+            resultForToken=[states[next_state[1]], string, change_line, False]
+            return resultForToken
+        else:
+            resultForToken= [states[next_state[1]], string + character, change_line, False]
+            return resultForToken
+        string =+character
 
 
-def get_next_token (INPUT, KEYWORDS):
+    if(next_state[1]==9 or next_state[1]==10 or next_state[1]==11 or next_state[1]==12 or next_state[1]==13):
+        resultForToken=["unclosed comment",string,change_line,True]
+        return resultForToken
+    elif(states[next_state[1]]=="" and next_state[1]!=0):
+        resultForToken=["invalid input",string,change_line,True]
+        return resultForToken
+    else:
+        resultForToken=["","",-1,False]
+        return resultForToken
 
-    STATE_SITUATION = ["", "","","","","symbol" "ID", "", "NUM", "SYMBOL", "", "SYMBOL", "", "SYMBOL", "", "", "COMMENT", "", "", "WHITESPACE"]
-    STATE = 0
-    change_line = 0
-    lexeme = ""
-    return True
+
+
+
+
+
+
+
+
+
 
 
 def write_in_symbol_file(symbols, array, start_line: int):
