@@ -1,5 +1,5 @@
 import re
-#import os
+import os
 #def getNextToken():
 def is_keyword (KEYWORDS, ID : str):
     if (ID in KEYWORDS):
@@ -59,7 +59,6 @@ def lookahead_state(state:int,char:str):
             out="unmatched comment"
         else:
             out=7
-
 #num
     elif(state==3):
         if(re.match(char,'[0-9]')):
@@ -152,7 +151,7 @@ def get_next_token (INPUT, KEYWORDS):
         if (character == ""):
             break
 
-        next_state = cur_state(STATE, character)
+        next_state = lookahead_state(STATE, character)
         STATE = next_state[1]
 
     return True
@@ -167,11 +166,12 @@ def get_next_token (INPUT, KEYWORDS):
     return True
 
 
-def write_in_symbol_file(symbols, array, start_line: int):
-    return True
-def format_unclosed_comment(lexeme: str):
-    return True
+def add_symbols(symbols, arr, start: int):
+    for i in range(len(arr)):
+        symbols.write(str(start) + ".\t" + arr[i] + "\n")
+        start = start + 1
 
+# def format_unclosed_comment(lexeme: str):
 
 
 KEYWORDS = ["if", "else", "void", "int", "while", "break", "switch", "default", "case", "return"]
