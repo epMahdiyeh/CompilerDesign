@@ -1,13 +1,6 @@
 import re
-import os
-
+#import os
 #def getNextToken():
-def is_keyword (ID : str):
-    KEYWORDS = ["if", "else", "void", "int", "while", "break", "switch", "default", "case", "return"]
-    if (ID in KEYWORDS):
-        return True
-    else:
-        return False
 
 def cur_state(state:int,char:str):
     end_state = 0
@@ -93,6 +86,7 @@ def cur_state(state:int,char:str):
         else:
             error=True
             out="invalid input"
+#
     elif(state==8):
         if( char=='*'):
             out=9
@@ -133,23 +127,13 @@ def cur_state(state:int,char:str):
         else:
             out = "invalid input"
             error = True
-    if (out == "next_state or error type"):
-        out = state
-
-    return out
 
 
-def get_next_token(input, keywords):
-    STATE_SITUATION = ["","","","","","","symbol","","","ID","","","","","whitespace","","num","symbol","symbol","","comment","comment"]
-    state = 0
-    change_line = 0
-    lexeme = ""
-    while (True):
-        i = 1
-        while (True):
-            character = input.read(i).decode()
-            if (character == ""):
-                break
+
+
+
+
+
 
 
 
