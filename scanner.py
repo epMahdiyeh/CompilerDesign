@@ -1,8 +1,12 @@
 import re
-import os
-def getNextToken():
-
-def cur_state(state:int,char:str):
+#import os
+#def getNextToken():
+def is_keyword (KEYWORDS, ID : str):
+    if (ID in KEYWORDS):
+        return True
+    else:
+        return False
+def lookahead_state(state:int,char:str):
     symbol = [";", ":", ",", "[", "]", "(", ")", "{", "}", "+", "-", "<"]
     whitespace = [" ", "\n", "\t", "\r", "\f", "\v"]
     keywords = ["if", "else", "void", "int", "repeat", "break", "until", "return"]
@@ -131,6 +135,58 @@ def cur_state(state:int,char:str):
         else:
             out = "invalid input"
             error = True
+
+    if (out == "next_state or error type"):
+        out = state
+
+    return out
+def get_next_token (INPUT, KEYWORDS):
+
+    STATE_SITUATION = ["", "", "ID", "", "NUM", "SYMBOL", "", "SYMBOL", "", "SYMBOL", "", "", "COMMENT", "", "", "WHITESPACE"]
+    STATE = 0
+    change_line = 0
+    lexeme = ""
+
+    while (True):
+        character = INPUT.read(1).decode()
+        if (character == ""):
+            break
+
+        next_state = cur_state(STATE, character)
+        STATE = next_state[1]
+
+    return True
+
+
+def get_next_token (INPUT, KEYWORDS):
+
+    STATE_SITUATION = ["", "","","","","symbol" "ID", "", "NUM", "SYMBOL", "", "SYMBOL", "", "SYMBOL", "", "", "COMMENT", "", "", "WHITESPACE"]
+    STATE = 0
+    change_line = 0
+    lexeme = ""
+    return True
+
+
+def write_in_symbol_file(symbols, array, start_line: int):
+    return True
+def format_unclosed_comment(lexeme: str):
+    return True
+
+
+
+KEYWORDS = ["if", "else", "void", "int", "while", "break", "switch", "default", "case", "return"]
+ID = []
+
+
+
+
+
+
+
+
+
+
+
 
 
 
