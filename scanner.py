@@ -173,7 +173,7 @@ def get_next_token(INPUT, KEYWORDS):
         else:
             resultForToken = [states[next_state[1]], string + character, change_line, False]
             return resultForToken
-        string = +character
+        string +=character
 
     if (next_state[1] == 9 or next_state[1] == 10 or next_state[1] == 11 or next_state[1] == 12 or next_state[1] == 13):
         resultForToken = ["unclosed comment", string, change_line, True]
