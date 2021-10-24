@@ -22,7 +22,7 @@ def lookahead_state(state:int,char:str):
     if (state == 0):
         # keyword an id
         if(re.match(char,'[a-zA-Z]')):
-            out = 1
+            out  1
         #num
         elif(re.match(char,'[0-9]')):
             out = 3
